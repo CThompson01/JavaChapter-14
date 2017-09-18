@@ -13,18 +13,23 @@ import javax.swing.JLabel;
 public class Window extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1191777976666769608L;
 	
-	//Various variables
-	final Dimension FRAME_DIMENSIONS = new Dimension(400,275);
+	// Various variables
 	int questFinished = 0;
 	int totalScore = 0;
-	String answerToQuestion = "";
+	
+	// JFrame Components
+	final Dimension FRAME_DIMENSIONS = new Dimension(400,275);
+	String answerToQuestion = "George Washington";
 	String[] breaking = {"                                                                                                                                                                 "};
 	JLabel question = new JLabel("Click Continue To Begin");
-	JCheckBox answerOne = new JCheckBox("George Washington");
+	JCheckBox answerOne = new JCheckBox("Abraham Lincoln");
 	JCheckBox answerTwo = new JCheckBox("George Washington");
-	JCheckBox answerThree = new JCheckBox("George Washington");
+	JCheckBox answerThree = new JCheckBox("Teddy Roosevelt");
 	JButton submit = new JButton("Continue");
 	
+	/**
+	 * Creates the window and adds all the needed components to it
+	 */
 	public Window() {
 		super("Quizlet");
 		setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -45,17 +50,26 @@ public class Window extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
+	/**
+	 * Makes the check boxes not visible at the start of the quiz
+	 */
 	private void init() {
 		answerOne.setVisible(false);
 		answerTwo.setVisible(false);
 		answerThree.setVisible(false);
 	}
 	
+	/**
+	 * Gets triggered when an action happens
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == submit) {
-			totalScore += CalculateScore.Calculate(answerOne, answerTwo, answerThree, answerToQuestion);
-			questFinished = Questions.nextQuestion(this, questFinished, answerToQuestion);
+			JCheckBox[] answers = {answerOne, answerTwo, answerThree};
+			totalScore += CalculateScore.Calculate(answers, answerToQuestion);
+			System.out.println(totalScore);
+			answerToQuestion = Questions.nextQuestion(this, questFinished, totalScore);
+			questFinished += 1;
 		}
 	}
 }
